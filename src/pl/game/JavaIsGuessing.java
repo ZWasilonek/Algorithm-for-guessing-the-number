@@ -6,44 +6,73 @@ public class JavaIsGuessing {
 
     public static void main(String[] args) {
 
-        System.out.println("Think of a number from 0 to 1000, " +
-                "and I will guess it in maximum 10 attempts");
-        System.out.println("If you are ready, press \"yes\".");
-        int min = 0;
+        Scanner sc = new Scanner(System.in);
         int max = 1000;
-        Scanner scanner = new Scanner(System.in);
+        int min = 0;
+        int myNumber = 24;
+        int countGuesses = 1;
+
+        System.out.println("Think a number between 0 and 1000, " +
+                "and I will guess it in a maximum of 10 attempts.");
+        System.out.println("If you are ready, press \"yes\".");
 
         String inputValue = "";
 
-        while (scanner.hasNext()) {
-            inputValue = scanner.next();
+        while (sc.hasNext()) {
+            inputValue = sc.next();
             if (!inputValue.equals("yes")) {
                 System.out.println("If you are ready, press \"yes\".");
             } else break;
         }
 
-        inputValue = scanner.nextLine();
+        inputValue = sc.nextLine();
 
-        for (int i = 1; i <= 10; ) {
-            int guess = (max - min) / 2 + min;
-            System.out.println("Attempt " + i + ". I am guessing: " + guess);
-            System.out.println("Press \"not enough\", \"too much\" or \"you guessed\"");
+        boolean victory = false;
 
-            String line = scanner.nextLine();
-            if (line.equals("You guessed")) {
-                System.out.println("I am the winner !");
-                break;
-            } else if (line.equals("too much")) {
-                max = guess;
-                i++;
-            } else if (line.equals("not enough")) {
-                min = guess;
-                i++;
-            } else {
-                System.out.println("Do not cheat!");
+        while (!victory) {
+
+            int guess = checkGuess(max, min);
+            System.out.println("Attempt " + countGuesses + " I'm guessing " + guess + "\n");
+            countGuesses++;
+
+            System.out.println("Select one of the option below:");
+            int option = pickOption(sc);
+
+            switch (option) {
+                case 1:
+                    if (guess == myNumber || countGuesses > 10) {
+                        System.err.println("Do not cheat!" + "\n");
+                    } else max = guess;
+                    break;
+                case 2:
+                    if (guess == myNumber || countGuesses > 10) {
+                        System.err.println("Do not cheat!" + "\n");
+                    } else min = guess;
+                    break;
+                case 3:
+                    System.out.println("Who is the winner ? I AM !!");
+                    victory = true;
             }
         }
-
     }
 
+    public static int checkGuess(int max, int min) {
+        return min + ((max - min) / 2);
+    }
+
+    public static int pickOption(Scanner sc) {
+        System.out.println("1 - Too much");
+        System.out.println("2 - Not enough");
+        System.out.println("3 - You guessed !");
+        while (!sc.hasNextInt()) {
+            sc.next();
+            System.out.println("You must to select 1, 2, or 3");
+        }
+        int option = sc.nextInt();
+        while (option != 1 && option != 2 && option != 3) {
+            option = sc.nextInt();
+            System.out.println("You must to select 1, 2, or 3");
+        }
+        return option;
+    }
 }
