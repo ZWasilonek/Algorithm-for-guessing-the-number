@@ -25,8 +25,6 @@ public class JavaIsGuessing {
             } else break;
         }
 
-        inputValue = sc.nextLine();
-
         boolean victory = false;
 
         while (!victory) {
